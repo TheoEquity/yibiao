@@ -49,8 +49,8 @@
 ### 1. 克隆仓库
 
 ```bash
-git clone <仓库地址>
-cd yibiao-simple
+git clone https://github.com/TheoEquity/yibiao.git
+cd yibiao
 ```
 
 ### 2. 安装依赖
@@ -104,8 +104,8 @@ npm install -g pnpm pm2
 
 ```bash
 # 1. 克隆代码
-git clone <仓库地址> yibiao-web
-cd yibiao-web
+git clone https://github.com/TheoEquity/yibiao.git
+cd yibiao
 
 # 2. 安装依赖
 pnpm install
@@ -279,7 +279,7 @@ curl -I http://127.0.0.1:3000
 
 ### ⬇️ 下载方式
 
-从 [GitHub Releases](https://github.com/yibiaoai/yibiao-simple/releases) 下载最新版本，运行安装包或可执行文件即可启动。
+本仓库为 Web 版本，通过 `git clone` 拉取后自行部署即可。旧桌面端版本可查看 [GitHub Releases](https://github.com/TheoEquity/yibiao/releases)。
 
 ### 🎬 使用方式
 
@@ -301,7 +301,7 @@ curl -I http://127.0.0.1:3000
 ### 🏗️ 项目结构
 
 ```
-yibiao-simple/
+yibiao/
 ├── apps/
 │   ├── api/              # API 后端服务（端口 3001）
 │   │   └── src/
@@ -340,7 +340,7 @@ pnpm check:web     # Web 代码检查
 
 欢迎各种形式的贡献！
 
-1. **🐛 问题反馈**: 在 [Issues](https://github.com/yibiaoai/yibiao-simple/issues) 中报告bug
+1. **🐛 问题反馈**: 在 [GitHub Issues](https://github.com/TheoEquity/yibiao/issues) 中报告bug
 2. **💡 功能建议**: 提出新功能需求和改进建议  
 3. **🔧 代码贡献**: Fork项目，提交Pull Request
 4. **📖 文档完善**: 帮助改进文档和使用说明
@@ -359,7 +359,7 @@ pnpm check:web     # Web 代码检查
     <td width="50%" valign="top">
 
 - **官方网站**: [https://yibiao.pro](https://yibiao.pro)
-- **问题反馈**: [GitHub Issues](https://github.com/yibiaoai/yibiao-simple/issues)
+- **问题反馈**: [GitHub Issues](https://github.com/TheoEquity/yibiao/issues)
 - **邮箱联系**: support@yibiao.pro
 
     </td>
