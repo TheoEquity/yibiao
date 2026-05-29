@@ -7,39 +7,218 @@
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/Electron-41+-47848f.svg" alt="Electron">
+  <img src="https://img.shields.io/badge/Node.js-20+-339933.svg" alt="Node.js">
+  <img src="https://img.shields.io/badge/Next.js-15.3+-000000.svg" alt="Next.js">
   <img src="https://img.shields.io/badge/React-19+-61dafb.svg" alt="React">
   <img src="https://img.shields.io/badge/TypeScript-5.9+-3178c6.svg" alt="TypeScript">
-  <img src="https://img.shields.io/badge/Vite-7+-646cff.svg" alt="Vite">
   <a href="https://deepwiki.com/FB208/OpenBidKit_Yibiao"><img src="https://deepwiki.com/badge.svg" alt="Ask DeepWiki"></a>
 </p>
-
 
 <p align="left">
   <strong>🚀 开箱即用-开源免费AI标书编写工具</strong>
   <br>
   易标投标工具箱是一款面向招投标场景的智能标书制作工具，完全开源，包括AI生成技术方案、图文生成、商务标、企业知识库管理、标书查重、废标项检查、标讯等，更多功能还在开发中。
   <br>
-  支持OpenAI like模式的所有AI api，目前已深度适配DeepSeek、龙猫、火山方舟三个平台，也支持ollama、lm studio等接入本地模型。
+  支持OpenAI like模式的所有AI api，目前已深度适配通义千问、DeepSeek、龙猫、火山方舟等多个平台。
   <br>
-  <br>
-  <strong>❓ 解决什么问题</strong>
-  <br>
-  现在AI写标书的付费工具非常多，但是价格都超级高，一份标书几十块，除非企业给报销，小企业的牛马根本用不起。免费的工具质量又非常差，OpenBidkit力争做投标领域的OpenClaw，提供开箱即用的优质标书编写工具，亲测一份20万字的投标标书，用deepseek v4 flash 生成只需要0.8-1元，还努力适配了完全免费的longcat-flash-lite，从此牛马不用自己买草料了。
 </p>
-
 
 ## 🌐 官方网站
 
 **在线体验**: [https://yibiao.pro](https://yibiao.pro)
 
-获取更多产品信息、在线体验和技术支持。
+## 📋 目录
 
-> **广告位 · Jlaude API**
->
-> 专注 GPT 全系列，比 DeepSeek V4 PRO更低成本，7 个月稳定高速！演武场原生对话 + 无限画布生图，一站配齐，好用不贵。
->
-> 链接直达：https://jlaudeapi.com
+- [快速开始（开发环境）](#-快速开始开发环境)
+- [生产部署](#-生产部署)
+- [技术架构](#%EF%B8%8F-技术架构)
+- [项目结构](#%EF%B8%8F-项目结构)
+- [贡献指南](#-贡献指南)
+- [许可证](#-许可证)
+- [联系我们](#%E2%80%8D-联系我们)
+
+---
+
+## 🚀 快速开始（开发环境）
+
+### 环境要求
+
+- **Node.js** >= 20
+- **pnpm** >= 10
+
+### 1. 克隆仓库
+
+```bash
+git clone <仓库地址>
+cd yibiao-simple
+```
+
+### 2. 安装依赖
+
+```bash
+pnpm install
+```
+
+### 3. 启动开发服务
+
+需要同时启动两个服务：API 后端和 Web 前端。
+
+**终端 1 - 启动 API 服务**（默认 `http://127.0.0.1:3001`）：
+
+```bash
+pnpm dev:api
+```
+
+**终端 2 - 启动 Web 前端**（默认 `http://127.0.0.1:3000`）：
+
+```bash
+pnpm dev:web
+```
+
+启动完成后，在浏览器访问 `http://127.0.0.1:3000` 即可。
+
+### 4. 配置 AI 模型
+
+首次使用需在 Web 界面进入 Settings 页面，填写 AI 接口的 Base URL 和 API Key。
+
+---
+
+## 🖥️ 生产部署
+
+### 方式一：PM2 部署（推荐）
+
+适用于自有服务器长期运行。
+
+#### 前置准备
+
+```bash
+# 安装 Node.js 20+
+curl -fsSL https://deb.nodesource.com/setup_20.x | sudo bash -
+sudo apt-get install -y nodejs
+
+# 安装 pnpm 和 pm2
+npm install -g pnpm pm2
+```
+
+#### 部署步骤
+
+```bash
+# 1. 克隆代码
+git clone <仓库地址> yibiao-web
+cd yibiao-web
+
+# 2. 安装依赖
+pnpm install
+
+# 3. 构建 Web 前端
+pnpm build:web
+
+# 4. 通过 PM2 启动服务
+pm2 start apps/api/src/main.js --name yibiao-api -- --port 3001
+pm2 start apps/web/node_modules/next/dist/bin/next --name yibiao-web -- start -p 3000 --cwd apps/web
+
+# 5. 保存 PM2 配置（开机自启）
+pm2 save
+pm2 startup
+```
+
+#### 创建 PM2 配置文件（可选）
+
+在项目根目录创建 `ecosystem.config.js`：
+
+```javascript
+module.exports = {
+  apps: [
+    {
+      name: 'yibiao-api',
+      script: 'apps/api/src/main.js',
+      env: {
+        NODE_ENV: 'production',
+        PORT: 3001
+      }
+    },
+    {
+      name: 'yibiao-web',
+      cwd: 'apps/web',
+      script: 'node_modules/next/dist/bin/next',
+      args: 'start -p 3000',
+      env: {
+        NODE_ENV: 'production'
+      }
+    }
+  ]
+};
+```
+
+启动：`pm2 start ecosystem.config.js`
+
+### 方式二：Docker 部署
+
+```dockerfile
+FROM node:20-alpine AS base
+RUN corepack enable && corepack prepare pnpm@latest --activate
+
+FROM base AS deps
+WORKDIR /app
+COPY pnpm-lock.yaml pnpm-workspace.yaml package.json ./
+COPY apps/api/package.json apps/api/
+COPY apps/web/package.json apps/web/
+COPY packages/ packages/
+RUN pnpm install
+
+FROM base AS builder
+WORKDIR /app
+COPY --from=deps /app/node_modules ./node_modules
+COPY --from=deps /app/packages ./packages
+COPY . .
+RUN pnpm build:web
+
+FROM base AS runner
+WORKDIR /app
+COPY --from=builder /app/node_modules ./node_modules
+COPY --from=builder /app/apps/api ./apps/api
+COPY --from=builder /app/apps/web/.next ./apps/web/.next
+COPY --from=builder /app/apps/web/package.json ./apps/web/
+COPY --from=builder /app/packages ./packages
+
+EXPOSE 3000 3001
+CMD ["sh", "-c", "node apps/api/src/main.js & cd apps/web && npx next start -p 3000"]
+```
+
+### Nginx 反向代理配置
+
+通过 Nginx 统一入口转发到前端和 API：
+
+```nginx
+server {
+    listen 80;
+    server_name your-domain.com;
+
+    # API 接口
+    location /api/ {
+        proxy_pass http://127.0.0.1:3001/;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+    }
+
+    # Web 前端
+    location / {
+        proxy_pass http://127.0.0.1:3000;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+    }
+}
+```
+
+### 验证部署
+
+```bash
+# 检查 API 健康状态
+curl http://127.0.0.1:3001/health
+
+# 检查 Web 是否正常运行
+curl -I http://127.0.0.1:3000
+```
 
 
 <h2 align="center">✨ 核心功能与优势</h2>
@@ -112,29 +291,49 @@
 
 ## 🛠️ 技术架构
 
-当前产品主体是 `client/` 下的独立桌面客户端，不依赖旧 `frontend/`、`backend/` 结构。
+本项目采用 Monorepo 架构，基于 pnpm workspace 管理。
 
-- **桌面端**：Electron Main / Preload 提供本地文件、配置、导出和后台任务能力
-- **界面层**：Vite + React + TypeScript，使用全局 CSS 和 Radix UI 基础组件
-- **业务模块**：技术方案、知识库、标书查重、废标项检查、设置页
-- **本地数据**：配置、工作区、生成缓存保存在 Electron `userData` 目录
-- **打包发布**：使用 electron-builder 构建 Windows / macOS 客户端
+- **Web 前端**：Next.js 15 (App Router) + React 19 + TypeScript，使用全局 CSS 和 Radix UI 组件
+- **API 后端**：Node.js 原生 HTTP Server，路由处理模块化
+- **共享模块**：`packages/` 下维护 shared-prompts、shared-schema、shared-types、task-protocol
+- **后台任务**：`apps/worker` 提供异步任务处理能力
 
 ### 🏗️ 项目结构
 
 ```
-易标投标工具箱/
-├── client/                    # 当前桌面客户端主体
-│   ├── electron/              # Main、Preload、IPC、本地服务
-│   ├── src/                   # Renderer 应用源码
-│   │   ├── app/               # 路由、菜单、Provider
-│   │   ├── features/          # 技术方案、知识库等业务模块
-│   │   └── shared/            # 通用类型、AI、UI、工具函数
-│   ├── assets/                # 图标与静态资源
-│   └── package.json           # 客户端依赖和打包配置
-├── analytics/                 # 独立埋点服务
-├── tools/                     # 独立文档解析与 MinerU 验证工具
-└── README.md                  # 项目文档
+yibiao-simple/
+├── apps/
+│   ├── api/              # API 后端服务（端口 3001）
+│   │   └── src/
+│   │       └── routes/   # 业务路由
+│   ├── web/              # Web 前端（Next.js，端口 3000）
+│   │   └── app/          # App Router 页面
+│   └── worker/           # 后台任务 Worker
+├── packages/
+│   ├── shared-prompts/   # AI Prompt 模板
+│   ├── shared-schema/    # 数据 Schema
+│   ├── shared-types/     # 通用 TypeScript 类型
+│   └── task-protocol/    # 任务通信协议
+└── pnpm-lock.yaml        # 锁定依赖版本
+```
+
+### 本地开发命令
+
+```bash
+# 安装依赖
+pnpm install
+
+# 启动开发服务
+pnpm dev:api       # API 服务 (3001)
+pnpm dev:web       # Web 前端 (3000)
+
+# 构建
+pnpm build:api     # 验证 API 代码
+pnpm build:web     # Next.js 生产构建
+
+# 代码检查
+pnpm check:api     # API 代码检查
+pnpm check:web     # Web 代码检查
 ```
 
 ## 🤝 贡献指南
