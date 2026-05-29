@@ -30,10 +30,12 @@ Thumbs.db
 
 # Node.js相关
 node_modules/
+.pnpm-store/
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 package-lock.json.backup
+apps/api/data/
 
 # IDE和编辑器文件（根据需要调整）
 .vscode/settings.json
@@ -181,6 +183,7 @@ celerybeat.pid
 .env
 .envrc
 .dev.vars
+.next/
 .venv
 env/
 venv/

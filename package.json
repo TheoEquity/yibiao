@@ -1,0 +1,14 @@
+{
+  "name": "yibiao-web-rebuild",
+  "private": true,
+  "version": "0.0.1",
+  "packageManager": "pnpm@10.11.0",
+  "scripts": {
+    "dev:web": "pnpm --dir apps/web dev",
+    "dev:api": "pnpm --dir apps/api dev",
+    "build:web": "pnpm --dir apps/web build",
+    "build:api": "pnpm --dir apps/api build",
+    "check:web": "pnpm --dir apps/web lint",
+    "check:api": "pnpm --dir apps/api lint"
+  }
+}

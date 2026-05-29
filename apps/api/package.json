@@ -1,0 +1,10 @@
+{
+  "name": "@yibiao/api",
+  "private": true,
+  "version": "0.0.1",
+  "scripts": {
+    "dev": "node --watch src/main.js",
+    "build": "node --check src/main.js",
+    "lint": "node --check src/main.js"
+  }
+}
