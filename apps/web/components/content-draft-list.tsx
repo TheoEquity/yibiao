@@ -1,7 +1,7 @@
 'use client';
 
 import { CollapsibleSection } from './collapsible-section';
-import { TriggerTaskButton } from './trigger-task-button';
+import { RegenerateChapterButton } from './regenerate-chapter-button';
 
 interface ChapterDraft {
   id: string;
@@ -43,7 +43,7 @@ export function ContentDraftList({ technicalPlanId, chapters }: ContentDraftList
             ) : null}
             <pre className="content-preview">{chapter.content}</pre>
             <div className="action-row">
-              <TriggerTaskButton technicalPlanId={technicalPlanId} taskType="export-document" label="重生成此章" variant="ghost" />
+              <RegenerateChapterButton technicalPlanId={technicalPlanId} chapterId={chapter.id} />
             </div>
           </CollapsibleSection>
         </article>

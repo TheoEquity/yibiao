@@ -490,7 +490,12 @@ export default async function TechnicalPlanDetailPage({ params }: { params: Prom
                         <ContentDraftList technicalPlanId={id} chapters={technicalPlan.generatedContent.chapters} />
                       </div>
                     ) : (
-                      <div className="placeholder-box">先完成目录生成，再触发"正文生成"任务生成章节草稿。</div>
+                      <div className="placeholder-box">
+                        <p>目录已完成后，点击下面按钮生成正文草稿。生成完成后会自动带入正文编辑区。</p>
+                        <div className="action-row">
+                          <TriggerTaskButton technicalPlanId={id} taskType="content-generation" label="开始生成正文" variant="primary" />
+                        </div>
+                      </div>
                     )}
                   </article>
 
@@ -504,7 +509,12 @@ export default async function TechnicalPlanDetailPage({ params }: { params: Prom
                         outlineSections={technicalPlan.generatedOutline?.sections.map((section) => ({ id: section.id, title: section.title })) || []}
                       />
                     ) : (
-                      <div className="placeholder-box">先完成正文生成，再进入正文编辑和保存。</div>
+                      <div className="placeholder-box">
+                        <p>当前还没有可编辑的正文草稿。先生成正文，生成完成后这里会自动出现编辑内容。</p>
+                        <div className="action-row">
+                          <TriggerTaskButton technicalPlanId={id} taskType="content-generation" label="开始生成正文" variant="primary" />
+                        </div>
+                      </div>
                     )}
                   </article>
 
