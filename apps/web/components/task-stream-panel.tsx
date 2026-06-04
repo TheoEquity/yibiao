@@ -153,7 +153,7 @@ export function TaskStreamPanel({ resourceType, resourceId, recentTaskSummaries 
         <CollapsibleSection title="最近完成" summaryExtra={`${recentTaskSummaries.length} 条`} defaultOpen={false}>
           <ul className="task-stage-list compact-stage-list">
             {recentTaskSummaries.slice(0, 4).map((item) => (
-              <li key={item.id} className="task-stage-item task-stage-completed">
+              <li key={`${item.id}-${item.taskType}-${item.createdAt}`} className="task-stage-item task-stage-completed">
                 <div className="task-stage-topline">
                   <strong>{getEventLabel(item.taskType)}</strong>
                   <span className="muted-text">已完成</span>

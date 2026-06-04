@@ -499,11 +499,12 @@ function buildTaskSummary(technicalPlan, taskType) {
 }
 
 function recordRecentTaskSummary(technicalPlan, taskType) {
+  const createdAt = new Date().toISOString();
   const nextItem = {
-    id: `task-summary-${Date.now()}`,
+    id: `task-summary-${Date.now()}-${taskType}`,
     taskType,
     summary: buildTaskSummary(technicalPlan, taskType),
-    createdAt: new Date().toISOString(),
+    createdAt,
   };
 
   technicalPlan.recentTaskSummaries = [
