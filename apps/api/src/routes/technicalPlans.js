@@ -512,6 +512,33 @@ function recordRecentTaskSummary(technicalPlan, taskType) {
   ].slice(0, 8);
 }
 
+function withTaskTimeout(taskName, promise, timeoutMs = 30000) {
+  let timeoutId;
+  const timeoutPromise = new Promise((_, reject) => {
+    timeoutId = setTimeout(() => reject(new Error(`${taskName} 超时`)), timeoutMs);
+  });
+
+  return Promise.race([promise, timeoutPromise]).finally(() => {
+    clearTimeout(timeoutId);
+  });
+}
+
+async function ensureGeneratedOutline(technicalPlan) {
+  try {
+    technicalPlan.generatedOutline = await withTaskTimeout('目录生成', generateOutlineWithModel(technicalPlan));
+  } catch {
+    technicalPlan.generatedOutline = buildGeneratedOutline(technicalPlan);
+  }
+
+  technicalPlan.generatedContent = null;
+  technicalPlan.exportedDocument = null;
+  technicalPlan.recentTaskSummaries = (Array.isArray(technicalPlan.recentTaskSummaries) ? technicalPlan.recentTaskSummaries : [])
+    .filter((item) => item.taskType !== 'content-generation' && item.taskType !== 'export-document');
+  technicalPlan.currentStep = 'content-generation';
+  technicalPlan.updatedAt = new Date().toISOString();
+  persistTechnicalPlans();
+}
+
 async function handleTechnicalPlans(request, response, url) {
   if (request.method === 'GET' && url.pathname === '/technical-plans') {
     sendJson(response, 200, { success: true, data: technicalPlans });
@@ -741,6 +768,11 @@ async function handleTechnicalPlans(request, response, url) {
       createdAt: technicalPlan.generatedOutline?.createdAt || new Date().toISOString(),
       updatedAt: new Date().toISOString(),
     };
+    technicalPlan.generatedContent = null;
+    technicalPlan.exportedDocument = null;
+    technicalPlan.recentTaskSummaries = (Array.isArray(technicalPlan.recentTaskSummaries) ? technicalPlan.recentTaskSummaries : [])
+      .filter((item) => item.taskType !== 'content-generation' && item.taskType !== 'export-document');
+    technicalPlan.currentStep = 'content-generation';
     technicalPlan.updatedAt = new Date().toISOString();
     persistTechnicalPlans();
 
@@ -900,24 +932,20 @@ async function handleTechnicalPlans(request, response, url) {
 
       if (task.type === 'bid-analysis') {
         try {
-          technicalPlan.bidAnalysis = await generateBidAnalysisWithModel(technicalPlan);
+          technicalPlan.bidAnalysis = await withTaskTimeout('招标分析', generateBidAnalysisWithModel(technicalPlan));
         } catch {
           technicalPlan.bidAnalysis = buildBidAnalysis(technicalPlan);
         }
         technicalPlan.currentStep = 'outline-generation';
         technicalPlan.updatedAt = new Date().toISOString();
         persistTechnicalPlans();
+
+        await ensureGeneratedOutline(technicalPlan);
+        recordRecentTaskSummary(technicalPlan, 'outline-generation');
       }
 
       if (task.type === 'outline-generation') {
-        try {
-          technicalPlan.generatedOutline = await generateOutlineWithModel(technicalPlan);
-        } catch {
-          technicalPlan.generatedOutline = buildGeneratedOutline(technicalPlan);
-        }
-        technicalPlan.currentStep = 'content-generation';
-        technicalPlan.updatedAt = new Date().toISOString();
-        persistTechnicalPlans();
+        await ensureGeneratedOutline(technicalPlan);
       }
 
       if (task.type === 'content-generation') {
@@ -926,7 +954,7 @@ async function handleTechnicalPlans(request, response, url) {
           : buildGeneratedOutline(technicalPlan).sections;
 
         try {
-          technicalPlan.generatedContent = await generateContentWithModel(technicalPlan, sections);
+          technicalPlan.generatedContent = await withTaskTimeout('正文生成', generateContentWithModel(technicalPlan, sections));
         } catch {
           technicalPlan.generatedContent = buildGeneratedContent(technicalPlan);
         }
