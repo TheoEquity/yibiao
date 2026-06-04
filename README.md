@@ -64,6 +64,7 @@ pnpm restore:deps
 这个命令会自动完成：
 
 - 恢复项目内缓存的 `pnpm store`
+- 如仓库内保存的是分片归档，自动合并并恢复 `vendor/python/wheels/`
 - 执行 `pnpm install --offline --frozen-lockfile`
 - 从 `vendor/python/wheels/` 安装文档解析所需的 Python 依赖
 
@@ -105,6 +106,7 @@ pnpm cache:deps
 
 - `vendor/pnpm/store-v10.tar.gz.part-*`
 - `vendor/python/wheels/`
+- `vendor/python/wheels.tar.gz.part-*`
 
 适用场景：
 

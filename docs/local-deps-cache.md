@@ -5,7 +5,7 @@
 ## 当前缓存范围
 
 - Node 依赖：`pnpm` store 打包并切分到 `vendor/pnpm/store-v10.tar.gz.part-*`
-- Python 依赖：文档解析链路需要的 CPU 精简版 `docling-slim[format-office,format-pdf]` wheels 缓存到 `vendor/python/wheels/`
+- Python 依赖：文档解析链路需要的 CPU 精简版 `docling-slim[format-office,format-pdf]` wheels 缓存到 `vendor/python/wheels/`，并额外切分归档到 `vendor/python/wheels.tar.gz.part-*`
 
 ## 生成缓存
 
@@ -18,7 +18,7 @@ bash scripts/cache-deps.sh
 这会完成两件事：
 
 - 打包当前 `pnpm store` 并自动切分成多个小于 100 MB 的分片
-- 下载 CPU 精简版 `docling-slim[format-office,format-pdf]` 及其依赖 wheels
+- 下载 CPU 精简版 `docling-slim[format-office,format-pdf]` 及其依赖 wheels，并把 `vendor/python/wheels/` 打包切分为多个小于 100 MB 的分片
 
 ## 恢复依赖
 
@@ -31,6 +31,7 @@ bash scripts/restore-deps.sh
 恢复步骤：
 
 - 自动拼接并解压项目内 `pnpm store` 分片缓存到当前用户的 `pnpm store` 路径
+- 如 `vendor/python/wheels/` 当前缺失，自动拼接并解压 `vendor/python/wheels.tar.gz.part-*`
 - 执行 `pnpm install --offline --frozen-lockfile`
 - 执行 Python 本地 wheel 安装
 
