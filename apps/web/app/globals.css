@@ -133,6 +133,45 @@ button {
   box-shadow: 0 12px 40px rgba(15, 23, 42, 0.05);
 }
 
+.plan-tabs {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.plan-tab-list {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.plan-tab-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 18px;
+  border: 1px solid #dbe4f0;
+  border-radius: 999px;
+  background: #ffffff;
+  color: #475569;
+  cursor: pointer;
+  font: inherit;
+  font-weight: 600;
+}
+
+.plan-tab-button.active {
+  background: #4f46e5;
+  border-color: #4f46e5;
+  color: #ffffff;
+  box-shadow: 0 12px 30px rgba(79, 70, 229, 0.22);
+}
+
+.plan-tab-panel-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
 .steps-vertical-list {
   list-style: none;
   margin: 16px 0 0;
@@ -168,6 +207,47 @@ button {
 }
 
 .steps-vertical-list li.active-step .step-number {
+  background: #4f46e5;
+  color: #fff;
+}
+
+.steps-horizontal-list {
+  list-style: none;
+  margin: 16px 0 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 12px;
+}
+
+.steps-horizontal-list li {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  padding: 12px 14px;
+  border-radius: 14px;
+  background: #f8fafc;
+  border: 1px solid #e5e7eb;
+}
+
+.steps-horizontal-list li.active-step {
+  background: #eef2ff;
+  border-color: #c7d2fe;
+}
+
+.steps-horizontal-list .step-number {
+  width: 28px;
+  height: 28px;
+  border-radius: 999px;
+  background: #e5e7eb;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  flex-shrink: 0;
+}
+
+.steps-horizontal-list li.active-step .step-number {
   background: #4f46e5;
   color: #fff;
 }
@@ -250,6 +330,29 @@ button {
   font-size: 12px;
   background: #ede9fe;
   color: #5b21b6;
+}
+
+.status-pill-pending {
+  background: #e5e7eb;
+  color: #374151;
+}
+
+.status-pill-current {
+  background: #dbeafe;
+  color: #1d4ed8;
+}
+
+.status-pill-success {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.detail-status-line {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 12px;
 }
 
 .muted-text {
@@ -446,6 +549,37 @@ button {
   border: 1px solid #e5e7eb;
 }
 
+.task-summary-grid {
+  display: grid;
+  grid-template-columns: 140px minmax(0, 1fr);
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.task-summary-card {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 14px 16px;
+  border-radius: 16px;
+  background: #f8fafc;
+  border: 1px solid #e5e7eb;
+}
+
+.task-summary-card strong {
+  font-size: 22px;
+  color: #1e1b4b;
+}
+
+.task-summary-card.wide strong {
+  font-size: 16px;
+}
+
+.compact-stage-list,
+.compact-event-list {
+  margin-top: 0;
+}
+
 .risk-card-list {
   display: flex;
   flex-direction: column;
@@ -572,6 +706,55 @@ button {
   display: flex;
   flex-direction: column;
   gap: 6px;
+}
+
+.collapsible-section {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.collapsible-summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  cursor: pointer;
+  font-weight: 600;
+  list-style: none;
+}
+
+.collapsible-summary::-webkit-details-marker {
+  display: none;
+}
+
+.collapsible-summary::after {
+  content: '+';
+  width: 24px;
+  height: 24px;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: #e0e7ff;
+  color: #3730a3;
+  flex-shrink: 0;
+}
+
+.collapsible-section[open] .collapsible-summary::after {
+  content: '-';
+}
+
+.collapsible-summary-extra {
+  font-size: 12px;
+  color: #6b7280;
+  font-weight: 500;
+}
+
+.collapsible-content {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
 }
 
 .tender-form {
@@ -802,6 +985,10 @@ button {
   margin-bottom: 12px;
 }
 
+.outline-draft-head.no-bottom-gap {
+  margin-bottom: 0;
+}
+
 .outline-draft-head span {
   font-size: 12px;
   color: #4f46e5;
@@ -834,6 +1021,10 @@ button {
   padding: 18px;
   border-radius: 16px;
   background: #f8fafc;
+}
+
+.compact-toolbar {
+  margin-bottom: 0;
 }
 
 .content-draft-card h3 {

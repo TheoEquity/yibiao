@@ -2,6 +2,7 @@ import { AppNav } from '../../components/app-nav';
 import Link from 'next/link';
 import { CreateTechnicalPlanForm } from '../../components/create-technical-plan-form';
 import { fetchTechnicalPlans } from '../../lib/api';
+import { formatDateTime } from '../../lib/format';
 
 export default async function TechnicalPlansPage() {
   const result = await fetchTechnicalPlans();
@@ -30,7 +31,7 @@ export default async function TechnicalPlansPage() {
           <article key={plan.id} className="plan-card">
             <div className="plan-card-head">
               <span className="status-pill">{plan.status}</span>
-              <span className="muted-text">{new Date(plan.updatedAt).toLocaleString('zh-CN', { hour12: false })}</span>
+              <span className="muted-text">{formatDateTime(plan.updatedAt)}</span>
             </div>
             <h2>{plan.title}</h2>
             <p>当前步骤：{plan.currentStep}</p>

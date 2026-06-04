@@ -55,9 +55,25 @@ cd yibiao
 
 ### 2. 安装依赖
 
+如果仓库里已经包含本地依赖缓存，优先使用离线恢复：
+
+```bash
+pnpm restore:deps
+```
+
+这个命令会自动完成：
+
+- 恢复项目内缓存的 `pnpm store`
+- 执行 `pnpm install --offline --frozen-lockfile`
+- 从 `vendor/python/wheels/` 安装文档解析所需的 Python 依赖
+
+如果当前代码目录还没有本地依赖缓存，再使用常规安装：
+
 ```bash
 pnpm install
 ```
+
+文档解析链路依赖 Python 3。当前仓库内的精简缓存已经包含 `docling-slim[format-office,format-pdf]` 所需 wheels，重新从 GitHub 拉取本仓库后，直接执行 `pnpm restore:deps` 即可恢复 DOCX 和基础 PDF 解析能力。
 
 ### 3. 启动开发服务
 
@@ -76,6 +92,24 @@ pnpm dev:web
 ```
 
 启动完成后，在浏览器访问 `http://127.0.0.1:3000` 即可。
+
+### 额外说明：更新本地依赖缓存
+
+当你已经在本机安装好了最新依赖，并希望把依赖缓存一并保存在项目目录内时，执行：
+
+```bash
+pnpm cache:deps
+```
+
+这个命令会更新：
+
+- `vendor/pnpm/store-v10.tar.gz.part-*`
+- `vendor/python/wheels/`
+
+适用场景：
+
+- 重新拉取仓库后希望快速恢复依赖
+- 内网环境或网络受限环境需要复用本地缓存
 
 ### 4. 配置 AI 模型
 

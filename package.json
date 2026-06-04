@@ -4,11 +4,13 @@
   "version": "0.0.1",
   "packageManager": "pnpm@10.11.0",
   "scripts": {
+    "cache:deps": "bash scripts/cache-deps.sh",
     "dev:web": "pnpm --dir apps/web dev",
     "dev:api": "pnpm --dir apps/api dev",
     "build:web": "pnpm --dir apps/web build",
     "build:api": "pnpm --dir apps/api build",
     "check:web": "pnpm --dir apps/web lint",
-    "check:api": "pnpm --dir apps/api lint"
+    "check:api": "pnpm --dir apps/api lint",
+    "restore:deps": "bash scripts/restore-deps.sh"
   }
 }

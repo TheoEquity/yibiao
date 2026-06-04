@@ -184,6 +184,9 @@ celerybeat.pid
 .envrc
 .dev.vars
 .next/
+.next-dev/
+.next-build/
+.next.bak-*/
 .venv
 env/
 venv/

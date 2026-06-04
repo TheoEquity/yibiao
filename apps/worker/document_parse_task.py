@@ -1,7 +1,6 @@
 from dataclasses import dataclass, asdict
 from datetime import datetime, timezone
 from pathlib import Path
-from docling.document_converter import DocumentConverter
 import json
 import sys
 
@@ -57,6 +56,8 @@ def parse_document(file_path: str, parser: str = 'docling') -> dict:
     warnings = []
 
     try:
+        from docling.document_converter import DocumentConverter
+
         converter = DocumentConverter()
         conversion_result = converter.convert(str(path))
         document = conversion_result.document

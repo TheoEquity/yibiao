@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { AppNav } from '../../../components/app-nav';
 import { DocumentIngestSummary } from '../../../components/document-ingest-summary';
 import { fetchKnowledgeDocument } from '../../../lib/api';
+import { formatDateTime } from '../../../lib/format';
 
 export default async function KnowledgeDocumentDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
@@ -50,7 +51,7 @@ export default async function KnowledgeDocumentDetailPage({ params }: { params: 
           <h2>文档信息</h2>
           <p className="muted-text">状态：{data.document.status}</p>
           <p className="muted-text">条目数：{data.document.item_count}</p>
-          <p className="muted-text">更新时间：{new Date(data.document.updated_at).toLocaleString('zh-CN', { hour12: false })}</p>
+          <p className="muted-text">更新时间：{formatDateTime(data.document.updated_at)}</p>
           <DocumentIngestSummary
             title="解析摘要"
             file={{
