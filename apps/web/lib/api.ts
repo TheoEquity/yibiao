@@ -1,4 +1,5 @@
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL?.trim() || 'http://127.0.0.1:3001';
+const SERVER_API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL?.trim() || 'http://127.0.0.1:3001';
+const BROWSER_API_BASE_URL = '/api';
 
 type RequestOptions = {
   body?: unknown;
@@ -39,7 +40,11 @@ type ChapterDraft = {
 };
 
 function buildUrl(path: string) {
-  return new URL(path, API_BASE_URL).toString();
+  if (typeof window !== 'undefined') {
+    return `${BROWSER_API_BASE_URL}${path}`;
+  }
+
+  return new URL(path, SERVER_API_BASE_URL).toString();
 }
 
 async function request<T = unknown>(path: string, options: RequestOptions = {}) {
