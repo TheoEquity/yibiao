@@ -36,7 +36,7 @@ Agent 在任务执行过程中发现的条目应遵循以下格式：
 - Context: Agent 在执行本地部署与技术方案链路修复时发现
 - Category: 构建方法
 - Instructions:
-  - 当前有效工作目录是 `/workspace/yibiao`
+  - 当前有效工作目录是 `/workspace`
   - 项目使用 `pnpm` workspace，常用启动命令是 `pnpm dev:api` 和 `pnpm dev:web`
 
 [Next 开发与构建缓存隔离]
